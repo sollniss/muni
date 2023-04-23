@@ -10,13 +10,13 @@ A collection of algorithms for generating unique IDs.
 
 # Snowflake ID
 
-Snowflake IDs are unique identifiers used in distributed settings. The snowflake generates ~uint64 values, which means it can generate type aliases for easier marshalling.
+Snowflake IDs are unique identifiers used in distributed settings. This implementation generates ~uint64 values, which means it can generate type aliases for easier marshalling.
 
-There is a description of the default implementation from Wikipedia:
+Here is a description of the default implementation from [Wikipedia](https://en.wikipedia.org/wiki/Snowflake_ID):
 >Snowflakes are 64 bits in binary. (Only 63 are used to fit in a signed integer.) The first 41 bits are a timestamp, representing milliseconds since the chosen epoch. The next 10 bits represent a machine ID, preventing clashes. Twelve more bits represent a per-machine sequence number, to allow creation of multiple snowflakes in the same millisecond. The final number is generally serialized in decimal.
 
 The muni implementation allows customization of the bit-lengths for all parts, as well as the tick duration. The implementation is lock-less.
-The packages provides standard generators for Twitter snowflakes, Discord snowflakes and Instagram snowflakes (though it is untested whether the Instagram snowflakes are fully compatible, as their implementation might be using mod 1024 to generate the sequence part of the ID).
+The package provides standard generators for Twitter snowflakes, Discord snowflakes and Instagram snowflakes (though it is untested whether the Instagram snowflakes are fully compatible, as their implementation might be using mod 1024 to generate the sequence part of the ID).
 
 **Note that the generator panics if you try to generate an ID with an expired epoch.**
 
