@@ -71,9 +71,9 @@ func NewDefault[T ~uint64](startTime time.Time, nodeID uint64) *gen[T] {
 // nodeBits is the bit count for the machine ID, preventing clashes.
 // seqBits is the bit count for a per-machine sequence number, to allow creation of multiple snowflakes in the same epoch tick.
 //
-// Panics nodeID is < 0 or out of range,
-// tick is < 1,
-// timeStampBits + nodeBits + seqBits is > 64,
+// Panics if nodeID is < 0 or out of range,
+// or tick is < 1,
+// or timeStampBits + nodeBits + seqBits is > 64,
 // or seqBits is 0.
 func New[T ~uint64](startTime time.Time, nodeID uint64, tick time.Duration, timeStampBits uint8, nodeBits uint8, seqBits uint8) *gen[T] {
 	var nodeMax uint64 = 1<<seqBits - 1
