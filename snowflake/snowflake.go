@@ -7,9 +7,7 @@ import (
 )
 
 type gen[T ~uint64] struct {
-	lastTime *uint64
-	lastSeq  *uint64
-	lastID   *uint64
+	lastID *uint64
 
 	epoch   uint64
 	nsTicks uint64
@@ -95,8 +93,6 @@ func New[T ~uint64](startTime time.Time, nodeID uint64, tick time.Duration, time
 		panic("snowflake: seqBits must not be 0")
 	}
 
-	var s uint64 = 0
-	var t uint64 = 0
 	var i uint64 = 0
 	return &gen[T]{
 		timeStampBits: uint64(timeStampBits),
@@ -105,7 +101,6 @@ func New[T ~uint64](startTime time.Time, nodeID uint64, tick time.Duration, time
 		node:          uint64(nodeID),
 
 		nodeBits: uint64(nodeBits),
-		//seqBits:  seqBits,
 
 		timeStampOffset: uint64(nodeBits + seqBits),
 		nodeOffset:      uint64(seqBits),
@@ -113,9 +108,7 @@ func New[T ~uint64](startTime time.Time, nodeID uint64, tick time.Duration, time
 		maxSeq:       1<<seqBits - 1,
 		maxTimestamp: 1<<timeStampBits - 1,
 
-		lastSeq:  &s,
-		lastTime: &t,
-		lastID:   &i,
+		lastID: &i,
 	}
 }
 
