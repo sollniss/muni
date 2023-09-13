@@ -25,7 +25,7 @@ func (id *Uint64) UnmarshalJSON(b []byte) error {
 
 	i, err := strconv.ParseUint(string(b[1:len-1]), 10, 64)
 	if err != nil {
-		// Don't here, since we are saying the same thing basically.
+		// Don't wrap here, since we are saying the same thing basically.
 		return fmt.Errorf("UnmarshalJSON: parsing %s: invalid syntax", strconv.Quote(string(b)))
 	}
 
