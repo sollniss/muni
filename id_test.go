@@ -42,15 +42,13 @@ func TestIDMarshalJSON(t *testing.T) {
 	}
 }
 
-type unmarshalTest[T Uint64 | testJson] struct {
-	name string
-	in   string
-	out  T
-	err  bool
-}
-
 func TestIDUnmarshalJSON(t *testing.T) {
-	var testsUint64 = [...]unmarshalTest[Uint64]{
+	var testsUint64 = [...]struct {
+		name string
+		in   string
+		out  Uint64
+		err  bool
+	}{
 		{
 			"min",
 			`"0"`,
@@ -75,25 +73,16 @@ func TestIDUnmarshalJSON(t *testing.T) {
 			0,
 			true,
 		},
-	}
-
-	var testsJson = [...]unmarshalTest[testJson]{
 		{
-			"normal int",
-			`{"id":"12345"}`,
-			testJson{ID: 12345},
-			false,
-		},
-		{
-			"json string",
-			`{"id":"asd"}`,
-			testJson{},
+			"string",
+			`"asd"`,
+			0,
 			true,
 		},
 		{
-			"json empty",
-			`{"id":""}`,
-			testJson{},
+			"empty",
+			`""`,
+			0,
 			true,
 		},
 	}
@@ -108,21 +97,6 @@ func TestIDUnmarshalJSON(t *testing.T) {
 			}
 
 			if val != tt.out {
-				t.Errorf("%s: got: %+v, expected: %+v", tt.name, val, tt.out)
-			}
-		})
-	}
-
-	for _, tt := range testsJson {
-		t.Run(tt.name, func(t *testing.T) {
-			var val testJson
-			err := json.Unmarshal([]byte(tt.in), &val)
-
-			if (err != nil) != tt.err {
-				t.Errorf("%s: invalid err, got: %+v", tt.name, err)
-			}
-
-			if val.ID != tt.out.ID {
 				t.Errorf("%s: got: %+v, expected: %+v", tt.name, val, tt.out)
 			}
 		})
