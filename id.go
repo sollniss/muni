@@ -1,7 +1,7 @@
 package muni
 
 import (
-	"errors"
+	"fmt"
 	"strconv"
 )
 
@@ -11,7 +11,7 @@ type Uint64 uint64
 func (id Uint64) MarshalJSON() ([]byte, error) {
 	buff := make([]byte, 0, 22)
 	buff = append(buff, '"')
-	buff = strconv.AppendInt(buff, int64(id), 10)
+	buff = strconv.AppendUint(buff, uint64(id), 10)
 	buff = append(buff, '"')
 	return buff, nil
 }
@@ -20,12 +20,13 @@ func (id Uint64) MarshalJSON() ([]byte, error) {
 func (id *Uint64) UnmarshalJSON(b []byte) error {
 	len := len(b)
 	if len < 3 || b[0] != '"' || b[len-1] != '"' {
-		return errors.New("UnmarshalJSON: invalid ID")
+		return fmt.Errorf("UnmarshalJSON: parsing %s: invalid syntax", strconv.Quote(string(b)))
 	}
 
-	i, err := strconv.ParseInt(string(b[1:len-1]), 10, 64)
+	i, err := strconv.ParseUint(string(b[1:len-1]), 10, 64)
 	if err != nil {
-		return err
+		// Don't wrap here, since we are saying the same thing basically.
+		return fmt.Errorf("UnmarshalJSON: parsing %s: invalid syntax", strconv.Quote(string(b)))
 	}
 
 	*id = Uint64(i)
