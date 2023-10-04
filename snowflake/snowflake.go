@@ -115,7 +115,7 @@ func New[T ~uint64](startTime time.Time, nodeID uint64, tick time.Duration, time
 // ID generates a unique ID packed into an uint64.
 //
 // Panics if the epoch has ended.
-func (g gen[T]) ID() uint64 {
+func (g gen[T]) ID() T {
 
 	for {
 		localLastID := atomic.LoadUint64(g.lastID)
@@ -135,7 +135,7 @@ func (g gen[T]) ID() uint64 {
 
 		newID := (now << g.timeStampOffset) | (g.node << g.nodeOffset) | seq
 		if atomic.CompareAndSwapUint64(g.lastID, localLastID, newID) {
-			return newID
+			return T(newID)
 		}
 	}
 }
